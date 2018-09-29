@@ -64,33 +64,33 @@ class WeatherTest extends TestCase
     }
 
     public function testGetLiveWeather()
-    {	
-    	// 将 getWeather 接口模拟为返回固定内容，以测试参数传递是否正确
-    	$c = \Mockery::mock(Weather::class, ['mock-key'])->makePartial();
-    	$c->expects()->getWeather('beijing','now')->andReturn(['success' => true]);
+    {
+        // 将 getWeather 接口模拟为返回固定内容，以测试参数传递是否正确
+        $c = \Mockery::mock(Weather::class, ['mock-key'])->makePartial();
+        $c->expects()->getWeather('beijing', 'now')->andReturn(['success' => true]);
 
-    	//断言判断是否正确
-    	$this->assertSame(['success' => true], $c->getLiveWeather('beijing'));
+        //断言判断是否正确
+        $this->assertSame(['success' => true], $c->getLiveWeather('beijing'));
     }
 
     public function testgetLifestyleWeather()
-    {	
-    	// 将 getWeather 接口模拟为返回固定内容，以测试参数传递是否正确
-    	$c = \Mockery::mock(Weather::class, ['mock-key'])->makePartial();
-    	$c->expects()->getWeather('beijing','lifestyle')->andReturn(['success' => true]);
+    {
+        // 将 getWeather 接口模拟为返回固定内容，以测试参数传递是否正确
+        $c = \Mockery::mock(Weather::class, ['mock-key'])->makePartial();
+        $c->expects()->getWeather('beijing', 'lifestyle')->andReturn(['success' => true]);
 
-    	//断言判断是否正确
-    	$this->assertSame(['success' => true], $c->getLifestyleWeather('beijing'));
+        //断言判断是否正确
+        $this->assertSame(['success' => true], $c->getLifestyleWeather('beijing'));
     }
 
     public function testgetForecastWeather()
-    {	
-    	// 将 getWeather 接口模拟为返回固定内容，以测试参数传递是否正确
-    	$c = \Mockery::mock(Weather::class, ['mock-key'])->makePartial();
-    	$c->expects()->getWeather('beijing','forecast')->andReturn(['success' => true]);
+    {
+        // 将 getWeather 接口模拟为返回固定内容，以测试参数传递是否正确
+        $c = \Mockery::mock(Weather::class, ['mock-key'])->makePartial();
+        $c->expects()->getWeather('beijing', 'forecast')->andReturn(['success' => true]);
 
-    	//断言判断是否正确
-    	$this->assertSame(['success' => true], $c->getForecastWeather('beijing'));
+        //断言判断是否正确
+        $this->assertSame(['success' => true], $c->getForecastWeather('beijing'));
     }
 
     public function testGetWeatherWithGuzzleRuntimeException()

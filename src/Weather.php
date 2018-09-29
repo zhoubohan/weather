@@ -101,7 +101,7 @@ class Weather
         if (!\in_array($type, ['now', 'forecast', 'lifestyle', 'grid-minute', 'hourly'])) {
             throw new InvalidArgumentException('Invalid type value:'.$type);
         }
-        
+
         $requestUrl = $this->requestUrl.$type;
 
         $query = array_filter([
@@ -125,20 +125,18 @@ class Weather
     //获取实时天气
     public function getLiveWeather($location)
     {
-    	return $this->getWeather($location, 'now');
+        return $this->getWeather($location, 'now');
     }
 
     //获取生活指数
     public function getLifestyleWeather($location)
     {
-    	return $this->getWeather($location, 'lifestyle');
+        return $this->getWeather($location, 'lifestyle');
     }
 
     //获取3-10天气预报
     public function getForecastWeather($location)
     {
-    	return $this->getWeather($location, 'forecast');
+        return $this->getWeather($location, 'forecast');
     }
-
-
 }
