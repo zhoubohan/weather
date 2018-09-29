@@ -101,25 +101,7 @@ class Weather
         if (!\in_array($type, ['now', 'forecast', 'lifestyle', 'grid-minute', 'hourly'])) {
             throw new InvalidArgumentException('Invalid type value:'.$type);
         }
-
-        // if (!\in_array(\strtolower($location), \array_keys(self::$typeMap))) {
-        // 	throw new InvalidArgumentException('Invalid type value:'.$type);
-        // }
-
-        // if (!\in_array(\strtolower($days), ['3', '7'])) {
-        // 	throw new InvalidArgumentException('Invalid day value:'.$days);
-        // }
-
-        // $typeNum = self::$typeMap[$type];
-
-        // if ($days === '3') {
-        // 	$days = '-3day';
-        // }
-
-        // if ($days === '7') {
-        // 	$days = '-7day';
-        // }
-
+        
         $requestUrl = $this->requestUrl.$type;
 
         $query = array_filter([
@@ -139,4 +121,24 @@ class Weather
             throw new HttpException($e->getMessage(), $e->getCode(), $e);
         }
     }
+
+    //获取实时天气
+    public function getLiveWeather($location)
+    {
+    	return $this->getWeather($location, 'now');
+    }
+
+    //获取生活指数
+    public function getLifestyleWeather($location)
+    {
+    	return $this->getWeather($location, 'lifestyle');
+    }
+
+    //获取3-10天气预报
+    public function getForecastWeather($location)
+    {
+    	return $this->getWeather($location, 'forecast');
+    }
+
+
 }
