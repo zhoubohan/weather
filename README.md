@@ -2,6 +2,7 @@
 
 <p align="center"> a weather sdk.</p>
 
+[![Build Status](https://travis-ci.org/zhoubohan/weather.svg?branch=master)](https://travis-ci.org/zhoubohan/weather)
 ![StyleCI build status](https://github.styleci.io/repos/150829300/shield)
 
 ## 安装
