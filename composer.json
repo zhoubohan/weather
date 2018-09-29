@@ -1,0 +1,28 @@
+{
+    "name": "zhoubohan\/weather",
+    "description": "a comic sdk",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "zhoubohan",
+            "email": "zhoubohan.pro@email.com"
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "^6.3",
+        "phpunit/phpunit": "^7.3",
+        "mockery/mockery": "^1.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Zhoubohan\\Weather\\": "./src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Zhoubohan\\Weather\\ServiceProvider"
+            ]
+        }
+    }
+}
