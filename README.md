@@ -2,8 +2,9 @@
 
 <p align="center"> a weather sdk.</p>
 
+![StyleCI build status](https://github.styleci.io/repos/150829300)
 
-## Installing
+## 安装
 
 ```shell
 $ composer require zhoubohan/weather -vvv
