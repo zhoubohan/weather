@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the zhoubohan/weather.
+ *
+ * (c) zhoubohan <zhoubohan.pro@gmail.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Zhoubohan\Weather\Tests;
 
 use GuzzleHttp\Client;
@@ -11,54 +20,50 @@ use Zhoubohan\Weather\Exceptions\HttpException;
 use Zhoubohan\Weather\Weather;
 use PHPUnit\Framework\TestCase;
 
-
 class WeatherTest extends TestCase
-{	
+{
+    public function testGetWeatherWithInvalidType()
+    {
+        $c = new Weather('mock-key');
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid type value:foo');
+        $c->getWeather('beijing', 'foo');
+        $this->fail('Faild to assert getWeather throw exception with invalid argument');
+    }
 
-	public function testGetWeatherWithInvalidType()
-	{
-		$c = new Weather('mock-key');
-		$this->expectException(InvalidArgumentException::class);
-		$this->expectExceptionMessage('Invalid type value:foo');
-		$c->getWeather('beijing', 'foo');
-		$this->fail('Faild to assert getWeather throw exception with invalid argument');
-	}
+    public function testGetWeatherWithInvalidFormat()
+    {
+        $c = new Weather('mock-key');
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid response format:xml');
+        $c->getWeather('beijing', 'now', 'xml');
+        $this->fail('Faild to assert getWeather throw exception with invalid argument');
+    }
 
-	public function testGetWeatherWithInvalidFormat()
-	{
-		$c = new Weather('mock-key');
-		$this->expectException(InvalidArgumentException::class);
-		$this->expectExceptionMessage('Invalid response format:xml');
-		$c->getWeather('beijing', 'now', 'xml');
-		$this->fail('Faild to assert getWeather throw exception with invalid argument');
-	}
+    public function testGetWeather()
+    {
+        // 创建模拟接口响应值。
+        $response = new Response(200, [], '{"success": true}');
+        // 创建模拟 http client。
+        $client = \Mockery::mock(Client::class);
+        //指定将会产生的形为
+        $requesturl = 'https://free-api.heweather.com/s6/weather/now';
+        $client->allows()->get($requesturl, [
+            'query' => [
+                'key' => 'mock-key',
+                'location' => 'beijing',
+                'unit' => 'i',
+                'lang' => 'zh',
+            ],
+        ])->andReturn($response);
 
-	public function testGetWeather()
-	{	
-		// 创建模拟接口响应值。
-		$response = new Response(200, [], '{"success": true}'); 
-		// 创建模拟 http client。
-		$client = \Mockery::mock(Client::class);
-		//指定将会产生的形为
-		$requesturl = "https://free-api.heweather.com/s6/weather/now";
-		$client->allows()->get($requesturl, [
-			'query' => [
-				'key' => 'mock-key',
-				'location' => 'beijing',
-				'unit' => 'i',
-				'lang' => 'zh',
-			],
-		])->andReturn($response);
-			
+        // 将 `getHttpClient` 方法替换为上面创建的 http client 为返回值的模拟方法。
+        $c = \Mockery::mock(Weather::class, ['mock-key'])->makePartial();
+        $c->allows()->getHttpClient()->andReturn($client);
+        $this->assertSame(['success' => true], $c->getWeather('beijing'));
+    }
 
-		// 将 `getHttpClient` 方法替换为上面创建的 http client 为返回值的模拟方法。
-		$c = \Mockery::mock(Weather::class, ['mock-key'])->makePartial();
-		$c->allows()->getHttpClient()->andReturn($client);
-		$this->assertSame(['success' => true], $c->getWeather('beijing'));
-
-	}
-
-	public function testGetWeatherWithGuzzleRuntimeException()
+    public function testGetWeatherWithGuzzleRuntimeException()
     {
         $client = \Mockery::mock(Client::class);
         $client->allows()
@@ -75,23 +80,22 @@ class WeatherTest extends TestCase
         $w->getWeather('beijing');
     }
 
-	public function testGetHttpClient()
-	{	
-		$c = new Weather('mock-key');
-		$this->assertInstanceOf(ClientInterface::class, $c->getHttpClient());
+    public function testGetHttpClient()
+    {
+        $c = new Weather('mock-key');
+        $this->assertInstanceOf(ClientInterface::class, $c->getHttpClient());
+    }
 
-	}
+    public function testSetGuzzleOptions()
+    {
+        $c = new Weather('mock-key');
 
-	public function testSetGuzzleOptions()
-	{
-		$c = new Weather('mock-key');
-
-		$this->assertNull($c->getHttpClient()->getConfig('timeout'));
+        $this->assertNull($c->getHttpClient()->getConfig('timeout'));
 
         // 设置参数
         $c->setGuzzleOptions(['timeout' => 5000]);
 
         // 设置参数后，timeout 为 5000
         $this->assertSame(5000, $c->getHttpClient()->getConfig('timeout'));
-	}
+    }
 }
